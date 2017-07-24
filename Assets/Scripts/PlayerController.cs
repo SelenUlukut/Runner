@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour {
         {
             if (speed < 160)
             {
-                Debug.Log("asd");
                 speed += 0.2f;
             }
         }
@@ -62,7 +61,7 @@ public class PlayerController : MonoBehaviour {
          
         moveVector.y = 0;
         moveVector.z = moveVector.z * speed;
-        moveVector.x = moveVector.x * 30;
+        moveVector.x = moveVector.x * 15;
 
         //   Debug.Log(transform.position);
         
@@ -87,7 +86,8 @@ public class PlayerController : MonoBehaviour {
         if (other.tag == "Diamond")
         {
             point += (int)speed;
-            Destroy(other.gameObject);
+            // Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
             score_text.text = "score: " + point;
         }
         if (other.tag == "Barrier")

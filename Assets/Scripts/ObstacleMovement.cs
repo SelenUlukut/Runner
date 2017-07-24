@@ -20,7 +20,7 @@ public class ObstacleMovement : MonoBehaviour {
         {
             rote = -rote;
         }
-        rb.velocity =  new Vector3(rote, 0, 0);
+        rb.velocity = 5f* new Vector3(rote, 0, 0);
 	}
 
     
