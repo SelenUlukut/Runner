@@ -14,26 +14,34 @@ public class PlayerController : MonoBehaviour {
 
     private Vector3 lastPos;
 
+    public Canvas panel;
     public Text score_text;
-    
-	// Use this for initialization
-	void Start () {
+    public Text speed_text;
+
+    // Use this for initialization
+    void Start () {
+        panel.enabled = false;
         lastPos = transform.position;
         speed = 50f;
         point = 0;
         score_text.text = "score: 0";
+        speed_text.text = "speed: 0";
     }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        int sp = (int)((speed/50)*100);
+        speed_text.text = "speed: %" + sp;
+
         cont = transform.rotation.y;
         float h = 2f * Input.GetAxisRaw("Horizontal");
         transform.Rotate(0, h, 0);
 
         if (transform.rotation.y!=cont)
         {
-            speed = 40;
+            if (speed > 51)
+                speed--;
         }
         else
         {
@@ -63,7 +71,6 @@ public class PlayerController : MonoBehaviour {
         moveVector.z = moveVector.z * speed;
         moveVector.x = moveVector.x * 15;
 
-        //   Debug.Log(transform.position);
         
         transform.position += moveVector * Time.fixedDeltaTime;
         lastPos = transform.position;
@@ -85,7 +92,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.tag == "Diamond")
         {
-            point += (int)speed;
+            point += (int)speed*10;
             // Destroy(other.gameObject);
             other.gameObject.SetActive(false);
             score_text.text = "score: " + point;
@@ -98,21 +105,22 @@ public class PlayerController : MonoBehaviour {
         }
         if (other.tag == "Obstacle")
         {
-
-            //SceneManager.LoadScene("die_scene");
+            speed = 50f;
+            Time.timeScale = 0;
+            panel.enabled = true;
         }
-        
     }
-
+    
   
-
+    //Sorunlar
+    //zamanla yolda oluşan karaltılar
 
  
     //Eklenecekler
-    //Object pooling
     //Görsellikte iyileştirme
     //Kontrollerin sağ-sol tuşlarından taşınması
     //Menu
+    
 
 
 }

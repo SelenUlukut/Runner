@@ -29,7 +29,7 @@ public class SpawnController : MonoBehaviour {
     void Start()
     {
         safeZone = 10f;
-        spawn_z = 30f;
+        spawn_z = 100f;
         spawn_x = 0f;
         obstacleOnScreen = 30;
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -134,5 +134,29 @@ public class SpawnController : MonoBehaviour {
         }
         poolPointer[poolID] = 0;
     }
-  
+    public void Restart()
+    {
+        Canvas cv= PlayerController.FindObjectOfType<Canvas>();
+        cv.enabled = false;
+        for (int i=0;i<obstacleOnScreen;i++)
+        {
+            delete();
+        }
+        GameObject player= GameObject.FindGameObjectWithTag("Player");
+        Vector3 tmp = player.transform.position;
+        tmp.x = 0;
+        player.transform.position = tmp;
+        Quaternion Qtmp = player.transform.rotation;
+        Qtmp.y = 0;
+        player.transform.rotation = Qtmp;
+        spawn_z = player.transform.position.z + 100;
+        //Spawning Obstacles
+        for (int i = 0; i < obstacleOnScreen; i++)
+        {
+            spawn();
+        }
+        Time.timeScale = 1;
+
+    }
+
 }
