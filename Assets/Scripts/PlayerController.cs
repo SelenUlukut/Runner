@@ -18,14 +18,21 @@ public class PlayerController : MonoBehaviour {
     public Text score_text;
     public Text speed_text;
 
+    private bool left;
+    private bool right;
+
     // Use this for initialization
     void Start () {
         panel.enabled = false;
+ 
         lastPos = transform.position;
         speed = 50f;
         point = 0;
         score_text.text = "score: 0";
         speed_text.text = "speed: 0";
+
+        left = false;
+        right = false;
     }
 	
 	// Update is called once per frame
@@ -35,8 +42,14 @@ public class PlayerController : MonoBehaviour {
         speed_text.text = "speed: %" + sp;
 
         cont = transform.rotation.y;
-        float h = 2f * Input.GetAxisRaw("Horizontal");
-        transform.Rotate(0, h, 0);
+        if (left)
+        {
+            transform.Rotate(0, -1.5f, 0);
+        }
+        if (right)
+        {
+            transform.Rotate(0, 1.5f, 0);
+        }
 
         if (transform.rotation.y!=cont)
         {
@@ -92,8 +105,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.tag == "Diamond")
         {
-            point += (int)speed*10;
-            // Destroy(other.gameObject);
+            point += (int)speed;
             other.gameObject.SetActive(false);
             score_text.text = "score: " + point;
         }
@@ -111,16 +123,30 @@ public class PlayerController : MonoBehaviour {
         }
     }
     
-  
-    //Sorunlar
-    //zamanla yolda oluşan karaltılar
+    public void turnLeft()
+    {
+        left = true;
+    }
+    public void turnRight()
+    {
+        right = true;
+    }
 
- 
+    public void stopTurnLeft()
+    {
+        left = false;
+    }
+    public void stopTurnRight()
+    {
+        right = false;
+        Debug.Log(right);
+    }
+
+
+
+
     //Eklenecekler
-    //Görsellikte iyileştirme
-    //Kontrollerin sağ-sol tuşlarından taşınması
-    //Menu
-    
-
-
+    //Görsellik
+    //Ses
+    //coinlerin yol oluşturması
 }

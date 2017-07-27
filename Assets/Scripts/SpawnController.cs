@@ -84,13 +84,13 @@ public class SpawnController : MonoBehaviour {
     void spawn()
     {
         index = UnityEngine.Random.Range(1, prefabs.Length);
-        // obj = Instantiate(prefabs[randomIndex]) as GameObject;
 
-        spawn_x = UnityEngine.Random.Range(-3.25f, 3.25f);
+        spawn_x = UnityEngine.Random.Range(-3.2f, 3.2f);
         pool[index][poolPointer[index]].transform.position = new Vector3(spawn_x, 0,spawn_z);
         pool[index][poolPointer[index]].SetActive(true);
 
         activeObstacles.Add(pool[index][poolPointer[index]]);
+
         length = UnityEngine.Random.Range(15, 70);
 
         poolPointer[index]++;
@@ -98,7 +98,7 @@ public class SpawnController : MonoBehaviour {
 
         spawn_z += length;
     }
-
+   
     void delete()
     {
         // Destroy(activeObstacles[0]);
