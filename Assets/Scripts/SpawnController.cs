@@ -25,6 +25,8 @@ public class SpawnController : MonoBehaviour {
     private GameObject [][] pool;
     private int[] poolPointer;
 
+    public GameObject player;
+
     // Use this for initialization
     void Start()
     {
@@ -155,6 +157,8 @@ public class SpawnController : MonoBehaviour {
         {
             spawn();
         }
+        
+        player.GetComponent<PlayerController>().getSmaller(0);
         Time.timeScale = 1;
 
     }

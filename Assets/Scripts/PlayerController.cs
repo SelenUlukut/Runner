@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public float cont;
     private Vector3 moveVector;
-    public int point;
+    public static int point;
     public float angle;
 
     private Vector3 lastPos;
@@ -21,8 +21,12 @@ public class PlayerController : MonoBehaviour {
     private bool left;
     private bool right;
 
+    private float size;
+
     // Use this for initialization
     void Start () {
+        size = 1;
+
         panel.enabled = false;
  
         lastPos = transform.position;
@@ -38,8 +42,13 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        score_text.text = "score: " + point;
         int sp = (int)((speed/50)*100);
         speed_text.text = "speed: %" + sp;
+
+        if ((size>1.2f)&&(speed>80)) {
+            getSmaller(speed);
+        } 
 
         cont = transform.rotation.y;
         if (left)
@@ -87,14 +96,17 @@ public class PlayerController : MonoBehaviour {
         
         transform.position += moveVector * Time.fixedDeltaTime;
         lastPos = transform.position;
-        if (transform.position.x>3.75f)
+
+        
+        float border = 4.51f - size / 2;
+        if (transform.position.x > border)
         {
-            lastPos.x = 3.75f;
+            lastPos.x = border;
             transform.position = lastPos;
         }
-        if (transform.position.x < -3.75f)
+        if (transform.position.x < -border)
         {
-            lastPos.x = -3.75f;
+            lastPos.x = -border;
             transform.position = lastPos;
         }
 
@@ -107,17 +119,17 @@ public class PlayerController : MonoBehaviour {
         {
             point += (int)speed;
             other.gameObject.SetActive(false);
-            score_text.text = "score: " + point;
+            getBigger();
         }
         if (other.tag == "Barrier")
         {
-            
             angle = transform.rotation.y*180*1.2f;
             transform.Rotate(0,-angle,0);
         }
         if (other.tag == "Obstacle")
         {
             speed = 50f;
+            point = 0;
             Time.timeScale = 0;
             panel.enabled = true;
         }
@@ -139,14 +151,40 @@ public class PlayerController : MonoBehaviour {
     public void stopTurnRight()
     {
         right = false;
-        Debug.Log(right);
     }
 
+    public void getSmaller(float speed)
+    {
+        float k;
 
+        if (speed == 0)
+        {
+            k = transform.localScale.x - 1;
+            transform.localScale += new Vector3(-k, -k, -k);
+            return;
+        }
 
+        k = speed / 160;
+        k = k / 500;
+        transform.localScale += new Vector3(-k, -k, -k);
+        size = transform.localScale.x;
+        Vector3 down = transform.position;
+        down.y = (size - 1) / 2 - 0.25f;
+        transform.position = down;
+    }
+    void getBigger()
+    {
+        transform.localScale += new Vector3(+0.05f, +0.05f, +0.05f);
+        size = transform.localScale.x;
+        Debug.Log(size);
+        Vector3 up = transform.position;
+        up.y = (size-1) / 2 - 0.25f;
+        transform.position = up;
+    }
 
     //Eklenecekler
     //Görsellik
     //Ses
     //coinlerin yol oluşturması
+    //Topun büyüyüp  küçülmesi
 }
