@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     public float speed;
     public float cont;
     private Vector3 moveVector;
-    public static int point;
+    public int point;
     public float angle;
 
     private Vector3 lastPos;
@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviour {
     public Canvas panel;
     public Text score_text;
     public Text speed_text;
+    public Text scale_text;
+    public Text highScore_text;
 
     private bool left;
     private bool right;
@@ -32,8 +34,10 @@ public class PlayerController : MonoBehaviour {
         lastPos = transform.position;
         speed = 50f;
         point = 0;
-        score_text.text = "score: 0";
-        speed_text.text = "speed: 0";
+        score_text.text = "Score: 0";
+        speed_text.text = "Speed: %100";
+        scale_text.text = "Scale: %100";
+        highScore_text.text = "High Score: " + PlayerPrefs.GetInt("highScore", 0).ToString();
 
         left = false;
         right = false;
@@ -42,13 +46,16 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        score_text.text = "score: " + point;
+        score_text.text = "Score: " + point;
         int sp = (int)((speed/50)*100);
-        speed_text.text = "speed: %" + sp;
+        speed_text.text = "Speed: %" + sp;
 
-        if ((size>1.2f)&&(speed>80)) {
+        if ((size>1.01f)&&(speed>80)) {
             getSmaller(speed);
-        } 
+        }
+
+        int sc = (int)(size * 100);
+        scale_text.text = "Scale: %"+sc;
 
         cont = transform.rotation.y;
         if (left)
@@ -98,7 +105,7 @@ public class PlayerController : MonoBehaviour {
         lastPos = transform.position;
 
         
-        float border = 4.51f - size / 2;
+        float border = 4.55f - size / 2;
         if (transform.position.x > border)
         {
             lastPos.x = border;
@@ -120,6 +127,11 @@ public class PlayerController : MonoBehaviour {
             point += (int)speed;
             other.gameObject.SetActive(false);
             getBigger();
+            if (point > PlayerPrefs.GetInt("highScore", 0))
+            {
+                PlayerPrefs.SetInt("highScore", point);
+                highScore_text.text = "High Score: " + point;
+            }
         }
         if (other.tag == "Barrier")
         {
@@ -130,6 +142,7 @@ public class PlayerController : MonoBehaviour {
         {
             speed = 50f;
             point = 0;
+            other.GetComponent<ObstacleMovement>().setMoveFalse();
             Time.timeScale = 0;
             panel.enabled = true;
         }
@@ -161,6 +174,7 @@ public class PlayerController : MonoBehaviour {
         {
             k = transform.localScale.x - 1;
             transform.localScale += new Vector3(-k, -k, -k);
+            size = 1;
             return;
         }
 
@@ -176,15 +190,24 @@ public class PlayerController : MonoBehaviour {
     {
         transform.localScale += new Vector3(+0.05f, +0.05f, +0.05f);
         size = transform.localScale.x;
-        Debug.Log(size);
         Vector3 up = transform.position;
         up.y = (size-1) / 2 - 0.25f;
         transform.position = up;
     }
 
+
+    //Sorunlar
+    //Kenardan sekmeme
+
     //Eklenecekler
     //Görsellik
     //Ses
-    //coinlerin yol oluşturması
-    //Topun büyüyüp  küçülmesi
+
+    //obs movement change
+    //obs collider küçült
+    //Restart konum sıfırla
+    //Ne kadar büyündüğünü bas
+    //Hareketli engelleri çarpınca durdur
+    
+    //High score
 }

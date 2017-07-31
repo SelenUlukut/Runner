@@ -40,7 +40,7 @@ public class SpawnController : MonoBehaviour {
         safeZone_road = 60f;
         spawn_z_road = -10f;
         length_road = 50f;
-        roadOnScreen = 9;
+        roadOnScreen = 12;
         activeRoads = new List<GameObject>();
         
         //Createing Pools
@@ -90,6 +90,11 @@ public class SpawnController : MonoBehaviour {
         spawn_x = UnityEngine.Random.Range(-3.2f, 3.2f);
         pool[index][poolPointer[index]].transform.position = new Vector3(spawn_x, 0,spawn_z);
         pool[index][poolPointer[index]].SetActive(true);
+
+        if (pool[index][poolPointer[index]].tag == "Obstacle")
+        {
+            pool[index][poolPointer[index]].GetComponent<ObstacleMovement>().setMoveTrue();
+        }
 
         activeObstacles.Add(pool[index][poolPointer[index]]);
 
@@ -144,20 +149,33 @@ public class SpawnController : MonoBehaviour {
         {
             delete();
         }
-        GameObject player= GameObject.FindGameObjectWithTag("Player");
+        for(int i = 0; i < roadOnScreen; i++)
+        {
+            deleteRoad();
+        }
         Vector3 tmp = player.transform.position;
-        tmp.x = 0;
-        player.transform.position = tmp;
+       // tmp.x = 0;
+       // player.transform.position = tmp;
+        player.transform.position = new Vector3(0,0,0);
         Quaternion Qtmp = player.transform.rotation;
         Qtmp.y = 0;
         player.transform.rotation = Qtmp;
-        spawn_z = player.transform.position.z + 100;
-        //Spawning Obstacles
+
+        
+        spawn_z = 100f;
+        spawn_z_road = -10f;
+     //   Spawnind Road
+        for (int i = 0; i < roadOnScreen; i++)
+        {
+            spawnRoad();
+        }
+    //Spawning Obstacles
         for (int i = 0; i < obstacleOnScreen; i++)
         {
             spawn();
         }
         
+
         player.GetComponent<PlayerController>().getSmaller(0);
         Time.timeScale = 1;
 

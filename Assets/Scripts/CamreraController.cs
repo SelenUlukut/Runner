@@ -10,7 +10,7 @@ public class CamreraController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        lookAt = GameObject.FindGameObjectWithTag("Player").transform;
+        lookAt = GameObject.Find("Player").transform;
         offset = transform.position - lookAt.position;
 	}
 	

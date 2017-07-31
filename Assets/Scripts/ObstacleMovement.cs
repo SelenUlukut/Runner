@@ -5,13 +5,11 @@ using System;
 
 public class ObstacleMovement : MonoBehaviour {
     private int rote;
-    private Rigidbody rb;
-   
-
+    private bool move;
 	// Use this for initialization
 	void Start () {
-        rb = GetComponent<Rigidbody>();
         rote = (int)UnityEngine.Random.Range( -1.5f, 1.5f);
+        move = true;
 	}
 	
 	// Update is called once per frame
@@ -20,8 +18,17 @@ public class ObstacleMovement : MonoBehaviour {
         {
             rote = -rote;
         }
-        rb.velocity = 5f* new Vector3(rote, 0, 0);
-	}
-
-    
+        if (move)
+        {
+            transform.position += new Vector3(5 * rote, 0, 0) * Time.fixedDeltaTime;
+        }
+    }    
+    public void setMoveFalse()
+    {
+        move = false;
+    }
+    public void setMoveTrue()
+    {
+        move = true;
+    }
 }
