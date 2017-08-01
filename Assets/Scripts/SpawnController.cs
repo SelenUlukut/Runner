@@ -26,7 +26,7 @@ public class SpawnController : MonoBehaviour {
     private int[] poolPointer;
 
     public GameObject player;
-
+    public GameObject sheep;
     // Use this for initialization
     void Start()
     {
@@ -154,8 +154,6 @@ public class SpawnController : MonoBehaviour {
             deleteRoad();
         }
         Vector3 tmp = player.transform.position;
-       // tmp.x = 0;
-       // player.transform.position = tmp;
         player.transform.position = new Vector3(0,0,0);
         Quaternion Qtmp = player.transform.rotation;
         Qtmp.y = 0;
@@ -177,8 +175,10 @@ public class SpawnController : MonoBehaviour {
         
 
         player.GetComponent<PlayerController>().getSmaller(0);
+        sheep.GetComponent<Spin>().enabled = true;
         Time.timeScale = 1;
 
     }
 
+   
 }

@@ -25,9 +25,18 @@ public class PlayerController : MonoBehaviour {
 
     private float size;
 
+    public GameObject sheep;
+
+    public AudioClip barrierBoing;
+    public AudioClip eating;
+    public AudioClip hit;
+    private AudioSource source;
+
     // Use this for initialization
     void Start () {
         size = 1;
+
+        source = GetComponent<AudioSource>();
 
         panel.enabled = false;
  
@@ -124,6 +133,7 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.tag == "Diamond")
         {
+            source.PlayOneShot(eating, 0.5f);
             point += (int)speed;
             other.gameObject.SetActive(false);
             getBigger();
@@ -135,14 +145,17 @@ public class PlayerController : MonoBehaviour {
         }
         if (other.tag == "Barrier")
         {
+            source.PlayOneShot(barrierBoing,0.5f);
             angle = transform.rotation.y*180*1.2f;
             transform.Rotate(0,-angle,0);
         }
         if (other.tag == "Obstacle")
         {
+            source.PlayOneShot(hit, 1f);
             speed = 50f;
             point = 0;
             other.GetComponent<ObstacleMovement>().setMoveFalse();
+            sheep.GetComponent<Spin>().enabled = false;
             Time.timeScale = 0;
             panel.enabled = true;
         }
@@ -195,19 +208,24 @@ public class PlayerController : MonoBehaviour {
         transform.position = up;
     }
 
+    public float getSpeed()
+    {
+        return speed;
+    }
 
     //Sorunlar
     //Kenardan sekmeme
 
     //Eklenecekler
     //Görsellik
-    //Ses
 
-    //obs movement change
-    //obs collider küçült
-    //Restart konum sıfırla
-    //Ne kadar büyündüğünü bas
-    //Hareketli engelleri çarpınca durdur
-    
-    //High score
+    //Bir süre sonra konumları sıfıra çek
+    //Büyümeye ve çarpmaya efekt yap
+
+    //Çarpınca dönmeyi durdur
+    //Hız arttıkça dönmeyi hızlandır
+    //Ses
+    //Kenarlara çarpme
+    //Engele Çarpma
+    //Yeme
 }

@@ -8,6 +8,7 @@ public class Spin : MonoBehaviour {
     float randy;
     float randz;
     int counter;
+    public GameObject player;
     private void Start()
     {
         counter = 0;
@@ -16,8 +17,10 @@ public class Spin : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         counter++;
-        transform.Rotate(randx, randy, randz);
-        if (counter>300)
+        float sp = player.GetComponent<PlayerController>().getSpeed();
+        sp = sp / 40;
+        transform.Rotate(sp*randx, sp*randy, sp*randz);
+        if (counter>250)
         {
             changeRote();
             counter = 0;
