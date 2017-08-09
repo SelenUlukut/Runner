@@ -14,11 +14,14 @@ public class PlayerController : MonoBehaviour {
 
     private Vector3 lastPos;
 
-    public Canvas panel;
+    public GameObject panel;
     public Text score_text;
     public Text speed_text;
     public Text scale_text;
     public Text highScore_text;
+    public Text multiply_text;
+
+    private float r;
 
     private bool left;
     private bool right;
@@ -32,39 +35,55 @@ public class PlayerController : MonoBehaviour {
     public AudioClip hit;
     private AudioSource source;
 
+    public ParticleSystem fart;
+
     // Use this for initialization
     void Start () {
         size = 1;
 
         source = GetComponent<AudioSource>();
 
-        panel.enabled = false;
+        panel.SetActive(false);
  
         lastPos = transform.position;
         speed = 50f;
         point = 0;
-        score_text.text = "Score: 0";
-        speed_text.text = "Speed: %100";
-        scale_text.text = "Scale: %100";
-        highScore_text.text = "High Score: " + PlayerPrefs.GetInt("highScore", 0).ToString();
+        score_text.text = "Score \n0";
+        speed_text.text = "Speed \n%100";
+        scale_text.text = "Scale \n%100";
+        highScore_text.text = "High Score <" + PlayerPrefs.GetInt("highScore", 0).ToString()+">";
+        multiply_text.text = " X " + speed;
 
         left = false;
         right = false;
+        
     }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
-        score_text.text = "Score: " + point;
+        score_text.text = "Score \n" + point;
         int sp = (int)((speed/50)*100);
-        speed_text.text = "Speed: %" + sp;
+        speed_text.text = "Speed \n%" + sp;
+        multiply_text.text = " X " + (int)speed;
+
+        r = speed-50;
+        r = (r / 65);
+        if (r<0.5f)
+        {
+            multiply_text.color = new Color(2*r, 0, 1);
+        }
+        if (r>0.5f)
+        {
+            multiply_text.color = new Color(1,0,1-(r-0.5f));
+        }
 
         if ((size>1.01f)&&(speed>80)) {
             getSmaller(speed);
         }
 
         int sc = (int)(size * 100);
-        scale_text.text = "Scale: %"+sc;
+        scale_text.text = "Scale \n%"+sc;
 
         cont = transform.rotation.y;
         if (left)
@@ -83,7 +102,7 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
-            if (speed < 160)
+            if (speed < 150)
             {
                 speed += 0.2f;
             }
@@ -105,28 +124,29 @@ public class PlayerController : MonoBehaviour {
 
         moveVector = transform.rotation * new Vector3(0, 0, 1);
          
-        moveVector.y = 0;
         moveVector.z = moveVector.z * speed;
         moveVector.x = moveVector.x * 15;
+        moveVector.y = 0;
 
-        
         transform.position += moveVector * Time.fixedDeltaTime;
         lastPos = transform.position;
 
-        
+        float delta;
         float border = 4.55f - size / 2;
         if (transform.position.x > border)
         {
-            lastPos.x = border;
+            delta =lastPos.x - border;
+            lastPos.x -= delta ;
+            lastPos.x -= 0.01f;
             transform.position = lastPos;
         }
         if (transform.position.x < -border)
         {
-            lastPos.x = -border;
+            delta = lastPos.x + border;
+            lastPos.x -= delta;
+            lastPos.x += 0.01f;
             transform.position = lastPos;
         }
-
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -140,7 +160,7 @@ public class PlayerController : MonoBehaviour {
             if (point > PlayerPrefs.GetInt("highScore", 0))
             {
                 PlayerPrefs.SetInt("highScore", point);
-                highScore_text.text = "High Score: " + point;
+                highScore_text.text = "High Score <" + point+">";
             }
         }
         if (other.tag == "Barrier")
@@ -157,7 +177,7 @@ public class PlayerController : MonoBehaviour {
             other.GetComponent<ObstacleMovement>().setMoveFalse();
             sheep.GetComponent<Spin>().enabled = false;
             Time.timeScale = 0;
-            panel.enabled = true;
+            panel.SetActive(true);
         }
     }
     
@@ -183,6 +203,12 @@ public class PlayerController : MonoBehaviour {
     {
         float k;
 
+        Vector3 tmp = fart.transform.position;
+        tmp.x = transform.position.x;
+        fart.transform.position = tmp;
+       // fart.time = 5;
+       // fart.Play();
+
         if (speed == 0)
         {
             k = transform.localScale.x - 1;
@@ -201,11 +227,14 @@ public class PlayerController : MonoBehaviour {
     }
     void getBigger()
     {
+        //iTween.Hash("x", 2, "easeType", "easeInOutExpo", "loopType", "pingPong", "delay", .1)
+        //"from", transform.localScale, "to", (transform.localScale + new Vector3(+0.05f, +0.05f, +0.05f)), "time", 1)
+       // iTween.ScaleBy(transform.gameObject, iTween.Hash("x", 1.5, "y", 1.5, "z", 1.5, "time", 10));
         transform.localScale += new Vector3(+0.05f, +0.05f, +0.05f);
         size = transform.localScale.x;
         Vector3 up = transform.position;
         up.y = (size-1) / 2 - 0.25f;
-        transform.position = up;
+        transform.position = up;,
     }
 
     public float getSpeed()
@@ -213,19 +242,29 @@ public class PlayerController : MonoBehaviour {
         return speed;
     }
 
-    //Sorunlar
+    public void setPlayerPosZero()
+    {
+        Vector3 tmp;
+        tmp = transform.position;
+        tmp.z = 0f;
+        transform.position = tmp;
+    }
+    public void hideButton()
+    {
+        panel.SetActive(false);
+    }
+
     //Kenardan sekmeme
 
+
     //Eklenecekler
-    //Görsellik
+    //High score yanıp sönme
+    //Her bin puan artışta particle effect
+    //High score gecilince yehu sesi
+    //Zayıflarken gaz çıkarma sesi
+    //Burgerlerin dönmesi
+    //Koyunun hoplaması
 
-    //Bir süre sonra konumları sıfıra çek
-    //Büyümeye ve çarpmaya efekt yap
-
-    //Çarpınca dönmeyi durdur
-    //Hız arttıkça dönmeyi hızlandır
-    //Ses
-    //Kenarlara çarpme
-    //Engele Çarpma
-    //Yeme
+    //Ekranın dönmemesi
+    //Çarpım katsayının renginin değişmesi
 }

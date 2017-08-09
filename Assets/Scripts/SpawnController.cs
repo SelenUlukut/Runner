@@ -50,7 +50,7 @@ public class SpawnController : MonoBehaviour {
         createPool(0, capacity);
           for (int i = 1; i < prefabs.Length; i++)
           {
-              capacity = (obstacleOnScreen / (prefabs.Length - 1)) * 5;
+              capacity = (obstacleOnScreen / (prefabs.Length - 1)) * 6;
               createPool(i, capacity);
           }
 
@@ -70,7 +70,11 @@ public class SpawnController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-          while (playerTransform.position.z - safeZone > (spawn_z - roadOnScreen * length_road-100))
+        /*if (player.transform.position.z > 5000)
+        {
+            setPositionZero();
+        }*/
+        while (playerTransform.position.z - safeZone > (spawn_z - roadOnScreen * length_road-100))
           {
               spawn();
               delete();
@@ -81,6 +85,8 @@ public class SpawnController : MonoBehaviour {
                spawnRoad();
                deleteRoad();
            }
+
+        
     }
 
     void spawn()
@@ -143,8 +149,7 @@ public class SpawnController : MonoBehaviour {
     }
     public void Restart()
     {
-        Canvas cv= PlayerController.FindObjectOfType<Canvas>();
-        cv.enabled = false;
+        player.GetComponent<PlayerController>().hideButton();
         for (int i=0;i<obstacleOnScreen;i++)
         {
             delete();
@@ -179,6 +184,26 @@ public class SpawnController : MonoBehaviour {
         Time.timeScale = 1;
 
     }
+     private void setPositionZero()
+    {
+        Vector3 tmp, delta;
 
+        delta = player.transform.position;
+        player.GetComponent<PlayerController>().setPlayerPosZero();
+        
+        for (int i = 0; i < roadOnScreen; i++)
+        {
+            Debug.Log("asd");
+            tmp = activeRoads[i].transform.position;
+            tmp.z -= delta.z;
+            activeRoads[i].transform.position = tmp;
+        }
+        for (int i = 0; i < obstacleOnScreen; i++)
+        {
+            tmp = activeObstacles[i].transform.position;
+            tmp.z -= delta.z;
+            activeObstacles[i].transform.position = tmp;
+        }
+    }
    
 }

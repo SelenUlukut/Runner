@@ -8,8 +8,12 @@ public class CamreraController : MonoBehaviour {
     private Vector3 offset;
     private Vector3 moveVec;
 
+
+
     // Use this for initialization
     void Start () {
+        Screen.orientation = ScreenOrientation.Portrait;
+
         lookAt = GameObject.Find("Player").transform;
         offset = transform.position - lookAt.position;
 	}
@@ -21,5 +25,7 @@ public class CamreraController : MonoBehaviour {
         moveVec.y = transform.position.y;
         transform.position = moveVec;
 
-	}
+        
+
+    }
 }

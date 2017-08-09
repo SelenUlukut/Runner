@@ -20,7 +20,7 @@ public class Spin : MonoBehaviour {
         float sp = player.GetComponent<PlayerController>().getSpeed();
         sp = sp / 40;
         transform.Rotate(sp*randx, sp*randy, sp*randz);
-        if (counter>250)
+        if (counter>150)
         {
             changeRote();
             counter = 0;
