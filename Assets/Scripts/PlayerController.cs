@@ -56,12 +56,12 @@ public class PlayerController : MonoBehaviour {
 
         left = false;
         right = false;
-        
     }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        Debug.Log((int)transform.position.z);
         score_text.text = "Score \n" + point;
         int sp = (int)((speed/50)*100);
         speed_text.text = "Speed \n%" + sp;
@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour {
                 speed = cont;
             }
 
+        
 
         moveVector = transform.rotation * new Vector3(0, 0, 1);
          
@@ -147,6 +148,7 @@ public class PlayerController : MonoBehaviour {
             lastPos.x += 0.01f;
             transform.position = lastPos;
         }
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -174,8 +176,6 @@ public class PlayerController : MonoBehaviour {
             source.PlayOneShot(hit, 1f);
             speed = 50f;
             point = 0;
-            other.GetComponent<ObstacleMovement>().setMoveFalse();
-            sheep.GetComponent<Spin>().enabled = false;
             Time.timeScale = 0;
             panel.SetActive(true);
         }
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour {
         size = transform.localScale.x;
         Vector3 up = transform.position;
         up.y = (size-1) / 2 - 0.25f;
-        transform.position = up;,
+        transform.position = up;
     }
 
     public float getSpeed()
@@ -263,8 +263,9 @@ public class PlayerController : MonoBehaviour {
     //High score gecilince yehu sesi
     //Zayıflarken gaz çıkarma sesi
     //Burgerlerin dönmesi
+    
     //Koyunun hoplaması
-
-    //Ekranın dönmemesi
-    //Çarpım katsayının renginin değişmesi
+    //Çit modelinin eklenmesi
+    //Saman balyası modelinin eklenmesi
+    //Mesafe attıkça hareketli cisimlerin atrması
 }

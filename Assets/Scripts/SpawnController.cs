@@ -6,8 +6,9 @@ using System;
 public class SpawnController : MonoBehaviour {
 
     public GameObject[] prefabs;
-    public float spawn_z;
-    public float spawn_x;
+    private float spawn_z;
+    private float spawn_x;
+    private float spawn_y;
     private float length;
     private int obstacleOnScreen;
     private float safeZone;
@@ -18,7 +19,7 @@ public class SpawnController : MonoBehaviour {
     private int index;
 
     private float safeZone_road;
-    public float spawn_z_road;
+    private float spawn_z_road;
     private float length_road;
     private int roadOnScreen;
     private List<GameObject> activeRoads;
@@ -93,8 +94,21 @@ public class SpawnController : MonoBehaviour {
     {
         index = UnityEngine.Random.Range(1, prefabs.Length);
 
+        if ((index < 4) && (index > 0))
+        { 
+            spawn_y = -0.25f;
+        }
+        if ((index < 7) && (index > 3))
+        {
+            spawn_y = 0.25f;
+        }
+        else
+        {
+            spawn_y = 0;
+        }
+
         spawn_x = UnityEngine.Random.Range(-3.2f, 3.2f);
-        pool[index][poolPointer[index]].transform.position = new Vector3(spawn_x, 0,spawn_z);
+        pool[index][poolPointer[index]].transform.position = new Vector3(spawn_x, spawn_y,spawn_z);
         pool[index][poolPointer[index]].SetActive(true);
 
         if (pool[index][poolPointer[index]].tag == "Obstacle")
@@ -114,8 +128,11 @@ public class SpawnController : MonoBehaviour {
    
     void delete()
     {
-        // Destroy(activeObstacles[0]);
         activeObstacles[0].SetActive(false);
+        if (activeObstacles[0].tag == "Obstacle")
+        {
+            activeObstacles[0].GetComponent<ObstacleMovement>().setMoveTrue();
+        }
         activeObstacles.RemoveAt(0);
     }
 
@@ -131,7 +148,6 @@ public class SpawnController : MonoBehaviour {
 
     void deleteRoad()
     {
-        //Destroy(activeRoads[0]);
         activeRoads[0].SetActive(false);
         activeRoads.RemoveAt(0);
     }
