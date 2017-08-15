@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spin : MonoBehaviour {
+public class SheepSpin : MonoBehaviour {
 
     float randx;
     float randy;

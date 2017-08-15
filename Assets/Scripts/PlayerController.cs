@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour {
     public AudioClip barrierBoing;
     public AudioClip eating;
     public AudioClip hit;
+    public AudioClip Fart_1;
+    public AudioClip Fart_2;
     private AudioSource source;
 
     public ParticleSystem fart;
@@ -256,16 +258,15 @@ public class PlayerController : MonoBehaviour {
 
     //Kenardan sekmeme
 
-
     //Eklenecekler
     //High score yanıp sönme
     //Her bin puan artışta particle effect
     //High score gecilince yehu sesi
     //Zayıflarken gaz çıkarma sesi
+    //Yeme sesinin ikiye çıkarılması
+    //Fake shadow
+
     //Burgerlerin dönmesi
+    //Sheep animation eklenmesi
     
-    //Koyunun hoplaması
-    //Çit modelinin eklenmesi
-    //Saman balyası modelinin eklenmesi
-    //Mesafe attıkça hareketli cisimlerin atrması
 }

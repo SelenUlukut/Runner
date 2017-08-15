@@ -196,7 +196,7 @@ public class SpawnController : MonoBehaviour {
         
 
         player.GetComponent<PlayerController>().getSmaller(0);
-        sheep.GetComponent<Spin>().enabled = true;
+        sheep.GetComponent<SheepSpin>().enabled = true;
         Time.timeScale = 1;
 
     }
