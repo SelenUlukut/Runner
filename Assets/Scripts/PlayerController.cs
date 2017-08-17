@@ -266,7 +266,7 @@ public class PlayerController : MonoBehaviour {
     //Yeme sesinin ikiye çıkarılması
     //Fake shadow
 
-    //Burgerlerin dönmesi
-    //Sheep animation eklenmesi
+
+ 
     
 }
